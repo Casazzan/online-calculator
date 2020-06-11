@@ -114,6 +114,57 @@ function backspace() {
     }
 }
 
+function negate() {
+    if (currentOperator) {
+        currentSecondNum = -currentSecondNum;
+        updateDisplay(currentSecondNum);
+    }
+    else {
+        currentFirstNum = -currentFirstNum;
+        updateDisplay(currentFirstNum);
+    }
+}
+
+function percent() {
+    if (currentOperator) {
+        currentSecondNum /= 100;
+        updateDisplay(currentSecondNum);
+    }
+    else {
+        currentFirstNum /= 100;
+        updateDisplay(currentFirstNum);
+    }
+    justCalculated = true;
+}
+
+
+//keyboard handler
+function keyPressed(e) {
+    if ((e.keyCode >= 48 && e.keyCode <= 57)
+    || (e.keyCode >= 96 && e.keyCode <= 105)) { //numpad support
+        numberPressed(e.key);
+    }
+    else if (OPERATORS.includes(e.key)) {
+        operatorPressed(e.key);
+    }
+    else {
+        switch (e.keyCode) {
+            case 8:
+                backspace();
+                break;
+            case 190:
+                addDecimal();
+                break;
+            case 67:
+                clear();
+                break;
+            case 187:
+            case 13:
+                calculate();
+                break;
+        }
+    }
+}
 
 //attaching event listeners
 const numberBtns = document.querySelectorAll('.numeric-btn');
@@ -134,3 +185,8 @@ document.querySelector('.equals-btn').addEventListener('click', calculate);
 document.querySelector('.clear-btn').addEventListener('click', clear);
 document.querySelector('.decimal-btn').addEventListener('click', addDecimal);
 document.querySelector('.backspace-btn').addEventListener('click', backspace);
+document.querySelector('.negate-btn').addEventListener('click', negate);
+document.querySelector('.percent-btn').addEventListener('click', percent);
+
+document.addEventListener('keydown', keyPressed);
+
