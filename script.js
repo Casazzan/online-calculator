@@ -2,7 +2,7 @@ let currentOperator = "";
 let currentFirstNum = "";
 let currentSecondNum = "";
 let justCalculated = false;
-const OPERATORS = '+-÷x*/';
+const OPERATORS = '+-÷x/';
 
 //basic functions
 function add(a, b) {
@@ -28,12 +28,20 @@ function operate(a, operator, b) {
     if (operator == '+') return add(a, b);
     else if (operator == '-') return subtract(a, b);
     else if (operator == '÷' || operator == '/') return divide(a, b);
-    else if (operator == 'x' || operator == '*') return multiply(a, b);
+    else if (operator == 'x') return multiply(a, b);
     return 'Invalid operate';
 }
 
 function updateDisplay(value) {
-    document.querySelector('#display-value').textContent = value ? value : 0;
+    if(!value) {
+        document.querySelector('.display-value').textContent = 0;
+    }
+    else if(value.length > 10) {
+        document.querySelector('.display-value').textContent = value.substring(0,10);
+    }
+    else {
+        document.querySelector('.display-value').textContent = value;
+    }
 }
 
 function calculate() {
@@ -60,6 +68,7 @@ function operatorPressed(operator) {
 //if selects operator right after a result is displayed, uses result as left operand
 //precondition: operator is null after using equals.
 function numberPressed(num) {
+    if(isNaN(num)) return;
     if (justCalculated) { //resets screen
         currentFirstNum = num;
         updateDisplay(currentFirstNum);
@@ -182,11 +191,11 @@ operatorBtns.forEach(button => {
 });
 
 document.querySelector('.equals-btn').addEventListener('click', calculate);
-document.querySelector('.clear-btn').addEventListener('click', clear);
+document.querySelector('#clear').addEventListener('click', clear);
 document.querySelector('.decimal-btn').addEventListener('click', addDecimal);
-document.querySelector('.backspace-btn').addEventListener('click', backspace);
+document.querySelector('#backspace').addEventListener('click', backspace);
 document.querySelector('.negate-btn').addEventListener('click', negate);
-document.querySelector('.percent-btn').addEventListener('click', percent);
+document.querySelector('#percent').addEventListener('click', percent);
 
 document.addEventListener('keydown', keyPressed);
 
