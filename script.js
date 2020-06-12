@@ -2,7 +2,7 @@ let currentOperator = "";
 let currentFirstNum = "";
 let currentSecondNum = "";
 let justCalculated = false;
-const OPERATORS = '+-÷x/';
+const OPERATORS = '-÷x/*+';
 
 //basic functions
 function add(a, b) {
@@ -28,8 +28,12 @@ function operate(a, operator, b) {
     if (operator == '+') return add(a, b);
     else if (operator == '-') return subtract(a, b);
     else if (operator == '÷' || operator == '/') return divide(a, b);
-    else if (operator == 'x') return multiply(a, b);
+    else if (operator == 'x' || operator == '*') return multiply(a, b);
     return 'Invalid operate';
+}
+
+function round(num) {
+    return num.toFixed(3) * 1000 / 1000;
 }
 
 function updateDisplay(value) {
@@ -46,8 +50,7 @@ function updateDisplay(value) {
 
 function calculate() {
     if (!(currentFirstNum && currentSecondNum && currentOperator)) return;
-    let output = operate(+currentFirstNum, currentOperator, +currentSecondNum)
-    output = output.toFixed(2) * 100 / 100;  //fixes toFixed making 1 round to 1.00
+    const output = round(operate(+currentFirstNum, currentOperator, +currentSecondNum));
     updateDisplay(output);
     currentFirstNum = output;
     currentSecondNum = currentOperator = "";
@@ -59,9 +62,9 @@ function calculate() {
 function operatorPressed(operator) {
     if (currentOperator && currentSecondNum) { //allows users to string operations with =l
         calculate();
-        justCalculated = false;
     }
     currentOperator = operator;
+    justCalculated = false;
 }
 
 
@@ -136,11 +139,11 @@ function negate() {
 
 function percent() {
     if (currentOperator) {
-        currentSecondNum /= 100;
+        currentSecondNum = round(currentSecondNum / 100);
         updateDisplay(currentSecondNum);
     }
     else {
-        currentFirstNum /= 100;
+        currentFirstNum = round(currentFirstNum / 100);
         updateDisplay(currentFirstNum);
     }
     justCalculated = true;
@@ -152,6 +155,7 @@ function keyPressed(e) {
     if ((e.keyCode >= 48 && e.keyCode <= 57)
     || (e.keyCode >= 96 && e.keyCode <= 105)) { //numpad support
         numberPressed(e.key);
+        //highlightKey('.numeric-btn', e.key);
     }
     else if (OPERATORS.includes(e.key)) {
         operatorPressed(e.key);
@@ -162,6 +166,7 @@ function keyPressed(e) {
                 backspace();
                 break;
             case 190:
+            case 110:
                 addDecimal();
                 break;
             case 67:
@@ -174,6 +179,17 @@ function keyPressed(e) {
         }
     }
 }
+
+// function highlightKey(tag, key) {
+//     const numberBtns = document.querySelectorAll(tag);
+//     const cl = tag.substring(1)+'-pressed';
+//     numberBtns.forEach(button => {
+//         if(key == button.textContent) {
+//             button.classList.add(cl);
+//             button.addEventListener()
+//         }
+//     });
+// }
 
 //attaching event listeners
 const numberBtns = document.querySelectorAll('.numeric-btn');
