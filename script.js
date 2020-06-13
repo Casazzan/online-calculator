@@ -10,7 +10,7 @@ function add(a, b) {
 }
 
 function divide(a, b) {
-    if (b == 0) return 'ERROR: Divide by 0'; //do something
+    if (b == 0) return 'Illegal/0'; //do something
     return a / b;
 }
 
@@ -33,10 +33,12 @@ function operate(a, operator, b) {
 }
 
 function round(num) {
+    if(isNaN(num)) return num; //if error message
     return num.toFixed(3) * 1000 / 1000;
 }
 
 function updateDisplay(value) {
+    //console.log(value);
     if(!value) {
         document.querySelector('.display-value').textContent = 0;
     }
@@ -152,8 +154,7 @@ function percent() {
 
 //keyboard handler
 function keyPressed(e) {
-    if ((e.keyCode >= 48 && e.keyCode <= 57)
-    || (e.keyCode >= 96 && e.keyCode <= 105)) { //numpad support
+    if (!isNaN(e.key)) { //numpad support
         numberPressed(e.key);
         //highlightKey('.numeric-btn', e.key);
     }
@@ -161,19 +162,18 @@ function keyPressed(e) {
         operatorPressed(e.key);
     }
     else {
-        switch (e.keyCode) {
-            case 8:
+        switch (e.key) {
+            case 'Backspace':
                 backspace();
                 break;
             case 190:
-            case 110:
+            case '.':
                 addDecimal();
                 break;
-            case 67:
+            case 'c':
                 clear();
                 break;
-            case 187:
-            case 13:
+            case 'Enter':
                 calculate();
                 break;
         }
