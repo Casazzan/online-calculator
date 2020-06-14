@@ -10,8 +10,9 @@ function add(a, b) {
 }
 
 function divide(a, b) {
-    if (b == 0) return 'Illegal/0'; //do something
+    if (b == 0) return 'Illegal/0';
     return a / b;
+    //test 12345
 }
 
 function multiply(a, b) {
